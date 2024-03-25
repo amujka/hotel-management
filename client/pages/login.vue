@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth';
+const { user } = storeToRefs(useAuthStore());
+const { setAuthCookie } = useCookieManager();
+
 const email = ref('');
 const password = ref('');
 
-const submitForm = async () => {
+const loginHandler = async () => {
 	const { data: responseData } = await useFetch('http://localhost:8080/login', {
 		method: 'POST',
 		headers: {
@@ -11,7 +15,13 @@ const submitForm = async () => {
 		body: JSON.stringify({ email: email.value, password: password.value }),
 	});
 
-	console.log(responseData.value);
+	const { token } = responseData.value;
+
+	if (token) {
+		setAuthCookie(token);
+	} else {
+		return;
+	}
 };
 </script>
 <template>
@@ -27,7 +37,7 @@ const submitForm = async () => {
 			</div>
 			<button
 				class="w-fit px-2 py-1 rounded mt-3 bg-blue-500 text-white"
-				@click="submitForm"
+				@click="loginHandler"
 			>
 				Login
 			</button>

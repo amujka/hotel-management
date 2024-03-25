@@ -39,7 +39,7 @@ export const postLogin = async (req, res) => {
 		const user = await User.login(email, password);
 		const token = createToken(user._id, user.isAdmin);
 		res.cookie('ac', token, { httpOnly: true, maxAge: maxAge * 1000 });
-		res.status(200).json({ user: user._id, token });
+		res.status(200).json({ token });
 	} catch (error) {
 		const errors = errorHandler(error);
 		res.status(400).json({ errors });
