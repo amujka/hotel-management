@@ -1,0 +1,10 @@
+<%-include('partials/header')%>
+    <ul class="rooms__list">
+        <% rooms.forEach(room => { %>
+            <li>
+                <a href="/room/<%= room.slug%>" class="">
+                    <span><%= room.name %></span>
+                </a>
+            </li>
+        <% }) %>
+    </ul>

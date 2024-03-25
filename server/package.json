@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
+    "dev": "nodemon server.js",
     "tailwind": "npx tailwindcss -i ./public/tailwind.css -o ./public/styles.css --watch"
   },
   "keywords": [],
@@ -16,11 +16,12 @@
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
-    "nodemon": "^3.0.2",
-    "dotenv": "^16.3.1"
+    "nodemon": "^3.0.2"
   }
 }
