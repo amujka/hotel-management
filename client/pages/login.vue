@@ -2,6 +2,9 @@
 import { useAuthStore } from '@/stores/auth';
 const { user } = storeToRefs(useAuthStore());
 const { setAuthCookie } = useCookieManager();
+definePageMeta({
+	layout: 'login',
+});
 
 const email = ref('');
 const password = ref('');

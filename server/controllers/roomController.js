@@ -1,8 +1,7 @@
 import Room from '../models/room.js';
 export const getRooms = async (req, res) => {
 	const rooms = await Room.find({});
-	res.locals.page = 'rooms';
-	res.render('rooms', { rooms });
+	res.status(200).json({ rooms });
 };
 
 export const getRoom = async (req, res) => {

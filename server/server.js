@@ -18,9 +18,8 @@ app.use(express.static('public'));
 app.use(cookieParser());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
-app.set('view engine', 'ejs');
 
-app.get('*', authRequired);
+// app.get('*', authRequired);
 app.use(loginRoutes);
 app.use(roomsRoutes);
 app.use(usersRoutes);
