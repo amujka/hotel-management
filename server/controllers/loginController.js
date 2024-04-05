@@ -29,10 +29,6 @@ const errorHandler = (err) => {
 	return errors;
 };
 
-export const getLogin = (req, res) => {
-	res.render('login');
-};
-
 export const postLogin = async (req, res) => {
 	const { email, password } = req.body;
 	try {

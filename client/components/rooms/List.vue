@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Room } from '~/types';
-const props = defineProps<{
+
+defineProps<{
 	rooms?: Room[];
 }>();
 </script>
