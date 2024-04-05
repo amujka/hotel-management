@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import {useRoomsStore} from '@/stores/rooms'
-const {rooms} = storeToRefs(useRoomsStore())
-const {fetchRooms} = useRoomsStore()
+import { useRoomsStore } from '@/stores/rooms';
+const { rooms } = storeToRefs(useRoomsStore());
+const { fetchRooms } = useRoomsStore();
 
-const {pending,error} = await fetchRooms()
-console.log("error",error.value);
-
+const { pending, error } = await fetchRooms();
 </script>
 <template>
 	<div class="container mx-auto my-4 flex-1">
 		<div v-if="pending" class="">loading...</div>
-		<div v-else-if="error" class="flex flex-col items-center bg-red-100 justify-center">
+		<div
+			v-else-if="error"
+			class="flex flex-col items-center bg-red-100 justify-center"
+		>
 			<h1 class="text-5xl text-red-500">{{ error.statusCode }}</h1>
 			<p>{{ error.statusMessage }}</p>
 		</div>
