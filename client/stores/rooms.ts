@@ -17,7 +17,7 @@ export const useRoomsStore = defineStore('rooms', () => {
 			}
 		);
 
-		if (status.value == 'success') {
+		if (status.value === 'success') {
 			setRooms(data.value.rooms as Room[]);
 		}
 
@@ -26,30 +26,32 @@ export const useRoomsStore = defineStore('rooms', () => {
 
 	const addNewRoom = async (newRoom: any) => {
 		try {
-			const { data, status } = await useFetch('http://localhost:8080/rooms', {
+			const { status, error } = await useFetch('http://localhost:8080/rooms', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify(newRoom),
 			});
-
-			await fetchRooms();
-		} catch (error) {
-			console.log('errorerror', error);
+			if (status.value === 'success') {
+				await fetchRooms();
+			} else {
+				throw error.value?.data;
+			}
+		} catch (err) {
+			return err;
 		}
 	};
 
 	const deleteRoomById = async (id: string) => {
 		try {
-			const res = await useFetch('http://localhost:8080/rooms', {
+			await useFetch('http://localhost:8080/rooms', {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({ _id: id }),
 			});
-			console.log(res);
 
 			await fetchRooms();
 		} catch (error) {

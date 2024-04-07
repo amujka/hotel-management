@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import {slugifyName} from '@/utils'
-import {useRoomsStore} from '@/stores/rooms'
-const {addNewRoom} = useRoomsStore()
+import { slugifyName } from '@/utils';
+import { useRoomsStore } from '@/stores/rooms';
+import { useVuelidate } from '@vuelidate/core';
+import { minValue, required, helpers } from '@vuelidate/validators';
+const { addNewRoom } = useRoomsStore();
 
 const isTypeDropdownActive = ref(false);
 const roomTypes = ['Basic', 'Luxury', 'Suite'];
@@ -10,36 +12,49 @@ const newRoom = ref({
 	name: '',
 	description: '',
 	slug: '',
-	price: 0,
+	price: 1,
 	specialNote: '',
-	dimension: 0,
-	numberOfBeds: 0,
+	dimension: 1,
+	numberOfBeds: 1,
 	offeredAmenities: '',
 	isFeatured: false,
 });
 
+const rules = {
+	name: { required: helpers.withMessage('Name cannot be empty', required) },
+	slug: { required: helpers.withMessage('Slug cannot be empty', required) },
+	description: {
+		required: helpers.withMessage('Description cannot be empty', required),
+	},
+	price: { minValue: helpers.withMessage('Minimum is 1', minValue(1)) },
+	numberOfBeds: {
+		minValue: helpers.withMessage('Minimum is 1', minValue(1)),
+	},
+	dimension: { minValue: helpers.withMessage('Minimum is 1', minValue(1)) },
+};
+const v$ = useVuelidate(rules, newRoom);
 
-const addNewRoomHandler = async() => {
-	await addNewRoom(newRoom.value)
-}
-
-
+const addNewRoomHandler = async () => {
+	const isFormCorrect = await v$.value.$validate();
+	if (isFormCorrect) {
+		await addNewRoom(newRoom.value);
+	}
+};
 </script>
 <template>
 	<div class="relative flex-1 p-4">
 		<div class="flex flex-col gap-4 max-w-2xl mx-auto">
 			<div class="flex flex-col gap-2">
-				<label class="text-teal-600 transition-all duration-200 ease-in-out"
-					>Name</label
+				<UtilsBaseInput v-model="newRoom.name" label="Name" type="text" />
+				<small
+					v-for="error in v$.name.$errors"
+					class="text-orange-600 font-bold"
+					>{{ error.$message }}</small
 				>
-				<input
-					type="text"
-					class="px-2 py-1 border border-teal-600 rounded outline-none focus:border-teal-400 transition-colors duration-200"
-					v-model="newRoom.name"
-				/>
 			</div>
 			<div class="flex flex-wrap gap-2">
-				<label class=" basis-full text-teal-600 transition-all duration-200 ease-in-out"
+				<label
+					class="basis-full text-teal-600 transition-all duration-200 ease-in-out"
 					>Slug</label
 				>
 				<input
@@ -50,9 +65,18 @@ const addNewRoomHandler = async() => {
 				/>
 				<button
 					class="flex-1 text-xs px-2 py-1 border border-teal-600 rounded outline-none disabled:bg-gray-100"
-					@click="newRoom.slug=slugifyName(newRoom.name)"
+					@click="newRoom.slug = slugifyName(newRoom.name)"
 					:disabled="!newRoom.name"
-				>Generate slug</button>
+				>
+					Generate slug
+				</button>
+				<div class="basis-full">
+					<small
+						v-for="error in v$.slug.$errors"
+						class="text-orange-600 font-bold"
+						>{{ error.$message }}</small
+					>
+				</div>
 			</div>
 			<div class="basis-full flex gap-4">
 				<div class="basis-1/5 flex flex-col gap-2">
@@ -61,7 +85,10 @@ const addNewRoomHandler = async() => {
 					>
 					<div class="relative">
 						<div
-							:class="[isTypeDropdownActive?'rounded-t':'rounded','w-full px-2 py-1 border border-teal-600 cursor-pointer']"
+							:class="[
+								isTypeDropdownActive ? 'rounded-t' : 'rounded',
+								'w-full px-2 py-1 border border-teal-600 cursor-pointer',
+							]"
 							@click="isTypeDropdownActive = !isTypeDropdownActive"
 						>
 							{{ newRoom.type }}
@@ -86,30 +113,48 @@ const addNewRoomHandler = async() => {
 						>Beds</label
 					>
 					<input
-						type="number" min="0"
+						type="number"
+						min="1"
 						class="w-full px-2 py-1 border border-teal-600 rounded outline-none focus:border-teal-400 transition-colors duration-200"
 						v-model="newRoom.numberOfBeds"
 					/>
+					<small
+						v-for="error in v$.numberOfBeds.$errors"
+						class="text-orange-600 font-bold"
+						>{{ error.$message }}</small
+					>
 				</div>
 				<div class="basis-1/5 flex flex-col gap-2">
 					<label class="text-teal-600 transition-all duration-200 ease-in-out"
 						>Price</label
 					>
 					<input
-						type="number" min="0"
+						type="number"
+						min="1"
 						class="w-full px-2 py-1 border border-teal-600 rounded outline-none focus:border-teal-400 transition-colors duration-200"
 						v-model="newRoom.price"
 					/>
+					<small
+						v-for="error in v$.price.$errors"
+						class="text-orange-600 font-bold"
+						>{{ error.$message }}</small
+					>
 				</div>
 				<div class="basis-1/5 flex flex-col gap-2">
 					<label class="text-teal-600 transition-all duration-200 ease-in-out"
 						>Dimension</label
 					>
 					<input
-						type="number" min="0"
+						type="number"
+						min="1"
 						class="w-full px-2 py-1 border border-teal-600 rounded outline-none focus:border-teal-400 transition-colors duration-200"
 						v-model="newRoom.dimension"
 					/>
+					<small
+						v-for="error in v$.dimension.$errors"
+						class="text-orange-600 font-bold"
+						>{{ error.$message }}</small
+					>
 				</div>
 				<div class="basis-1/5 flex flex-col items-start gap-2">
 					<label class="text-teal-600 transition-all duration-200 ease-in-out"
@@ -131,6 +176,11 @@ const addNewRoomHandler = async() => {
 					class="px-2 py-1 border border-teal-600 rounded outline-none focus:border-teal-400 transition-colors duration-200"
 					v-model="newRoom.description"
 				></textarea>
+				<small
+					v-for="error in v$.description.$errors"
+					class="text-orange-600 font-bold"
+					>{{ error.$message }}</small
+				>
 			</div>
 
 			<div class="flex flex-col gap-2">
