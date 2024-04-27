@@ -17,10 +17,13 @@ export const getRooms = async (req, res) => {
 };
 
 export const getRoom = async (req, res) => {
-	const { roomSlug } = req.params;
-	const room = await Room.findOne({ slug: roomSlug });
-	res.locals.page = room.name;
-	res.render('room', { room });
+	try {
+		const { id } = req.params;
+		const room = await Room.findById(id);
+		res.status(200).json(room);
+	} catch (error) {
+		res.status(400).json(error);
+	}
 };
 
 export const addNewRoom = async (req, res) => {

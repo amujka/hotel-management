@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import {
 	getRooms,
-	getRoom,
 	addNewRoom,
 	deleteRoomById,
+	getRoom,
 } from '../controllers/roomController.js';
 const router = Router();
 
 router.get('/rooms', getRooms);
-router.get('/room/:roomSlug', getRoom);
+router.get('/rooms/:id', getRoom);
 router.post('/rooms', addNewRoom);
 router.delete('/rooms', deleteRoomById);
 
