@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Room } from '~/types';
-import { useRoomsStore } from '@/stores/rooms';
-const { deleteRoomById } = useRoomsStore();
-
+const emit = defineEmits(['sendRoomId']);
+const eventHandler = (id: string) => {
+	emit('sendRoomId', id);
+};
 defineProps<{
 	rooms?: Room[];
 }>();
@@ -13,10 +14,10 @@ defineProps<{
 			<li
 				v-for="room in rooms"
 				:key="room._id"
-				@click="deleteRoomById(room._id)"
+				@click="eventHandler(room._id)"
 				class="text-teal-600 font-semibold py-1 px-2 hover:outline outline-1 outline-teal-600 rounded cursor-pointer transition-all duration-200 ease-in-out"
 			>
-				<label>{{ room.name }}</label>
+				{{ room.name }}
 			</li>
 		</ul>
 	</div>

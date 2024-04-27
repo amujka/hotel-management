@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoomsStore } from '@/stores/rooms';
 const { rooms } = storeToRefs(useRoomsStore());
-const { fetchRooms } = useRoomsStore();
+const { fetchRooms, fetchRoomById } = useRoomsStore();
 
 const { pending, error } = await fetchRooms();
 </script>
@@ -16,7 +16,7 @@ const { pending, error } = await fetchRooms();
 			<p>{{ error.statusMessage }}</p>
 		</div>
 		<div v-else class="flex divide-x border border-teal-600 divide-teal-600 rounded">
-			<RoomsList :rooms="rooms" />
+			<RoomsList :rooms="rooms" @send-room-id="fetchRoomById" />
 			<RoomsNewRoom />
 		</div>
 	</div>

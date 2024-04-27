@@ -4,7 +4,7 @@ import { useRoomsStore } from '@/stores/rooms';
 import { useVuelidate } from '@vuelidate/core';
 import { minValue, required, helpers } from '@vuelidate/validators';
 const { addNewRoom } = useRoomsStore();
-
+const { room } = storeToRefs(useRoomsStore());
 const isTypeDropdownActive = ref(false);
 const roomTypes = ['Basic', 'Luxury', 'Suite'];
 const newRoom = ref({
@@ -40,6 +40,14 @@ const addNewRoomHandler = async () => {
 		await addNewRoom(newRoom.value);
 	}
 };
+watch(
+	() => room.value,
+	() => {
+		Object.keys(newRoom.value).forEach((key) => {
+			newRoom.value[key] = room.value?.[key];
+		});
+	}
+);
 </script>
 <template>
 	<div class="relative flex-1 p-4">

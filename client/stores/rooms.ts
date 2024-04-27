@@ -1,9 +1,14 @@
 import type { Room } from '~/types';
 
 export const useRoomsStore = defineStore('rooms', () => {
-	let rooms = ref<Room[] | []>([]);
+	let rooms = ref<Room[]>();
 	let setRooms = (roomsPayload: Room[]) => {
 		rooms.value = roomsPayload;
+	};
+
+	const room = ref<Room>();
+	const setRoom = (roomPayload: Room) => {
+		room.value = roomPayload;
 	};
 
 	const fetchRooms = async () => {
@@ -16,12 +21,21 @@ export const useRoomsStore = defineStore('rooms', () => {
 				},
 			}
 		);
-
 		if (status.value === 'success') {
 			setRooms(data.value.rooms as Room[]);
 		}
-
 		return { pending, refresh, error };
+	};
+
+	const fetchRoomById = async (id: string) => {
+		try {
+			const roomRes = await $fetch(`http://localhost:8080/rooms/${id}`, {
+				method: 'GET',
+			});
+			setRoom(roomRes as Room);
+		} catch (error) {
+			console.log('FE error,', error);
+		}
 	};
 
 	const addNewRoom = async (newRoom: any) => {
@@ -61,7 +75,9 @@ export const useRoomsStore = defineStore('rooms', () => {
 
 	return {
 		rooms,
+		room,
 		fetchRooms,
+		fetchRoomById,
 		addNewRoom,
 		deleteRoomById,
 	};
