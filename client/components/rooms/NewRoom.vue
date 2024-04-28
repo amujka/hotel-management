@@ -7,7 +7,7 @@ const { addNewRoom, updateRoomById } = useRoomsStore();
 const { room } = storeToRefs(useRoomsStore());
 const isTypeDropdownActive = ref(false);
 const roomTypes = ['Basic', 'Luxury', 'Suite'];
-const newRoom = ref({
+const defaultValues = {
 	type: roomTypes[0],
 	name: '',
 	description: '',
@@ -18,7 +18,8 @@ const newRoom = ref({
 	numberOfBeds: 1,
 	offeredAmenities: '',
 	isFeatured: false,
-});
+};
+const newRoom = ref({ ...defaultValues });
 
 const rules = {
 	name: { required: helpers.withMessage('Name cannot be empty', required) },
@@ -34,19 +35,26 @@ const rules = {
 };
 const v$ = useVuelidate(rules, newRoom);
 
-const addNewRoomHandler = async (id: string) => {
+const addNewRoomHandler = async () => {
 	const isFormCorrect = await v$.value.$validate();
-	if (isFormCorrect) {
-		//await addNewRoom(newRoom.value);
-		await updateRoomById(newRoom.value);
-	}
+
+	if (!isFormCorrect) return;
+	else if (room.value === undefined) await addNewRoom(newRoom.value);
+	else await updateRoomById(newRoom.value);
+};
+
+const clearForm = () => {
+	newRoom.value = { ...defaultValues };
+	room.value = undefined;
 };
 watch(
 	() => room.value,
 	() => {
-		Object.keys(newRoom.value).forEach((key) => {
-			newRoom.value[key] = room.value?.[key];
-		});
+		if (room.value !== undefined) {
+			Object.keys(newRoom.value).forEach((key) => {
+				newRoom.value[key] = room.value?.[key];
+			});
+		}
 	}
 );
 </script>
@@ -214,12 +222,20 @@ watch(
 					v-model="newRoom.offeredAmenities"
 				/>
 			</div>
-			<button
-				class="self-end w-fit px-2 py-1 border border-teal-600 rounded outline-none text-teal-600 hover:border-teal-400 hover:text-teal-400"
-				@click="addNewRoomHandler"
-			>
-				Add new room
-			</button>
+			<div class="flex justify-between">
+				<button
+					class="w-fit px-2 py-1 border border-teal-600 rounded outline-none text-teal-600 hover:border-teal-400 hover:text-teal-400"
+					@click="clearForm"
+				>
+					Clear form
+				</button>
+				<button
+					class="w-fit px-2 py-1 border bg-teal-600 rounded outline-none text-white hover:bg-teal-400"
+					@click="addNewRoomHandler"
+				>
+					{{ room === undefined ? 'Add new room' : 'Update room' }}
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
