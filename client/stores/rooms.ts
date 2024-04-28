@@ -73,6 +73,32 @@ export const useRoomsStore = defineStore('rooms', () => {
 		}
 	};
 
+	const updateRoomById = async (payload: any) => {
+		const updatedFields = {};
+		Object.keys(payload).forEach((prop) => {
+			if (payload[prop] !== room.value?.[prop]) {
+				updatedFields[prop] = payload[prop];
+			}
+		});
+
+		try {
+			const response = await $fetch(
+				`http://localhost:8080/rooms/${room.value?._id}`,
+				{
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(updatedFields),
+				}
+			);
+
+			await fetchRooms();
+		} catch (error) {
+			console.log('fe error', error);
+		}
+	};
+
 	return {
 		rooms,
 		room,
@@ -80,5 +106,6 @@ export const useRoomsStore = defineStore('rooms', () => {
 		fetchRoomById,
 		addNewRoom,
 		deleteRoomById,
+		updateRoomById,
 	};
 });

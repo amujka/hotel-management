@@ -45,3 +45,15 @@ export const deleteRoomById = async (req, res) => {
 		res.status(400).json(error);
 	}
 };
+
+export const updateRoomById = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const a = req.body;
+		console.log(id, a);
+		await Room.findByIdAndUpdate(id, a);
+		res.status(200).json({ message: 'Room updated' });
+	} catch (error) {
+		res.status(400).json(error);
+	}
+};

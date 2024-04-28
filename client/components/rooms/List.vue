@@ -15,7 +15,7 @@ defineProps<{
 				v-for="room in rooms"
 				:key="room._id"
 				@click="eventHandler(room._id)"
-				class="text-teal-600 font-semibold py-1 px-2 hover:outline outline-1 outline-teal-600 rounded cursor-pointer transition-all duration-200 ease-in-out"
+				class="text-teal-600 font-semibold py-1 px-2 hover:outline outline-1 outline-teal-600 rounded cursor-pointer"
 			>
 				{{ room.name }}
 			</li>

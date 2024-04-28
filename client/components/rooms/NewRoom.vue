@@ -3,7 +3,7 @@ import { slugifyName } from '@/utils';
 import { useRoomsStore } from '@/stores/rooms';
 import { useVuelidate } from '@vuelidate/core';
 import { minValue, required, helpers } from '@vuelidate/validators';
-const { addNewRoom } = useRoomsStore();
+const { addNewRoom, updateRoomById } = useRoomsStore();
 const { room } = storeToRefs(useRoomsStore());
 const isTypeDropdownActive = ref(false);
 const roomTypes = ['Basic', 'Luxury', 'Suite'];
@@ -34,10 +34,11 @@ const rules = {
 };
 const v$ = useVuelidate(rules, newRoom);
 
-const addNewRoomHandler = async () => {
+const addNewRoomHandler = async (id: string) => {
 	const isFormCorrect = await v$.value.$validate();
 	if (isFormCorrect) {
-		await addNewRoom(newRoom.value);
+		//await addNewRoom(newRoom.value);
+		await updateRoomById(newRoom.value);
 	}
 };
 watch(
