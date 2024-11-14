@@ -13,7 +13,16 @@ import { authRequired } from './middleware/auth.js';
 const app = express();
 dotenv.config();
 const port = process.env.PORT;
-app.use(cors());
+
+// Configure CORS with options
+const corsOptions = {
+	origin: process.env.FRONTEND_URL, // Allow requests from your frontend's URL or all if not specified
+	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+	credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+	allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+};
+
+app.use(cors(corsOptions));
 app.use(express.static('public'));
 app.use(cookieParser());
 app.use(bodyParser.json()); // for parsing application/json
