@@ -8,12 +8,12 @@ const {
 	status,
 } = await useFetch<Room>(`http://localhost:8080/rooms/${route.params.id}`, {
 	method: 'GET',
+	lazy: true,
 	headers: {
 		'Content-Type': 'application/json',
 	},
 });
-
-console.log(room.value);
+watchEffect(() => console.log(room.value));
 </script>
 <template>
 	<div class="container mx-auto p-4">
@@ -22,6 +22,6 @@ console.log(room.value);
 			<h1>{{ error.statusCode }}</h1>
 			<p>{{ error.statusMessage }}</p>
 		</div>
-		<div v-else>room details {{ room?.name }}</div>
+		<RoomDetails v-else :room="room" />
 	</div>
 </template>

@@ -23,6 +23,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors());
 app.use(express.static('public'));
 app.use(cookieParser());
 app.use(bodyParser.json()); // for parsing application/json

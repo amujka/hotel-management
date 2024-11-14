@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/icon": "^1.7.5",
     "@pinia/nuxt": "^0.5.1",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
@@ -20,6 +21,7 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@iconify-json/material-symbols-light": "^1.2.6",
     "@nuxtjs/tailwindcss": "^6.11.4"
   }
 }
