@@ -31,26 +31,27 @@ defineProps<{
 				</figure>
 			</div>
 		</div>
-		<div class="flex flex-col gap-y-4 basis-full lg:basis-1/2">
-			<div class="">
+		<div class="flex flex-col gap-y-4 basis-full lg:w-1/2">
+			<div>
 				<h2 class="text-xl font-bold text-teal-600 lg:text-2xl">Description</h2>
 				<p>{{ room?.description }}</p>
 			</div>
-			<div class="">
+			<div>
 				<h2 class="text-xl font-bold text-teal-600 lg:text-2xl">
 					Offered Amenities
 				</h2>
-				<div class="flex flex-wrap gap-4">
+				<div class="grid grid-cols-12 gap-4 mt-2">
 					<p
 						v-for="amenitiy in room?.offeredAmenities"
-						:key="amenitiy"
-						class="basis-[calc((100%-2rem)/3)] bg-teal-600 text-white p-1"
+						:key="amenitiy.id"
+						class="flex gap-x-1 col-span-4 bg-teal-600 text-white p-1 lg:col-span-3 capitalize"
 					>
-						{{ amenitiy }}
 						<Icon
-							name="material-symbols:bed-outline-rounded"
-							style="color: black"
+							:name="`material-symbols-light:${amenitiy.icon}`"
+							style="color: white"
+							size="24px"
 						/>
+						{{ amenitiy.name }}
 					</p>
 				</div>
 			</div>

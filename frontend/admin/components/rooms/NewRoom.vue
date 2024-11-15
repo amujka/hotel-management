@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { slugifyName } from '@/utils';
 import { useRoomsStore } from '@/stores/rooms';
 import { useVuelidate } from '@vuelidate/core';
 import { minValue, required, helpers } from '@vuelidate/validators';
+import type { Amenity } from '~/types';
 const { addNewRoom, updateRoomById } = useRoomsStore();
 const { room } = storeToRefs(useRoomsStore());
 const isTypeDropdownActive = ref(false);
@@ -16,7 +16,7 @@ const defaultValues = {
 	specialNote: '',
 	dimension: 1,
 	numberOfBeds: 1,
-	offeredAmenities: '',
+	offeredAmenities: [] as Amenity[],
 	isFeatured: false,
 };
 const newRoom = ref({ ...defaultValues });
@@ -41,6 +41,20 @@ const addNewRoomHandler = async () => {
 	if (!isFormCorrect) return;
 	else if (room.value === undefined) await addNewRoom(newRoom.value);
 	else await updateRoomById(newRoom.value);
+};
+
+const addAmenityHandler = (amenity: Amenity) => {
+	let amenityIndex = newRoom.value.offeredAmenities.findIndex(
+		(a) => amenity['id'] == a['id']
+	);
+
+	if (amenityIndex === -1) {
+		newRoom.value.offeredAmenities = [...newRoom.value.offeredAmenities, amenity];
+	} else {
+		newRoom.value.offeredAmenities = newRoom.value.offeredAmenities.filter(
+			(existingAmenity) => existingAmenity['id'] !== amenity['id']
+		);
+	}
 };
 
 const clearForm = () => {
@@ -215,12 +229,17 @@ watch(
 				<label class="text-teal-600 transition-all duration-200 ease-in-out"
 					>Offered amenities</label
 				>
-				<input
-					type="text"
-					class="px-2 py-1 border border-teal-600 rounded outline-none focus:border-teal-400 transition-colors duration-200"
-					placeholder="separate by comma"
-					v-model="newRoom.offeredAmenities"
-				/>
+				<div class="flex flex-wrap gap-4">
+					<p
+						class="basis-[calc((100%-4rem)/5)] cursor-pointer p-1 rounded-lg text-center text-xs"
+						:class="newRoom.offeredAmenities.some((amenityObj: Amenity) => amenityObj.name === amenity.name) ? 'bg-teal-600 text-white' : 'border border-teal-600'"
+						v-for="amenity in AMENITIES"
+						:key="amenity.id"
+						@click="addAmenityHandler(amenity)"
+					>
+						{{ amenity.name }}
+					</p>
+				</div>
 			</div>
 			<div class="flex justify-between">
 				<button

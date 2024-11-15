@@ -7,6 +7,12 @@ export type AuthTokens = {
 	accessToken: string;
 };
 
+export type Amenity = {
+	id: string;
+	name: string;
+	icon: string;
+};
+
 export type Room = {
 	_id: string;
 	type: string;
@@ -17,6 +23,6 @@ export type Room = {
 	specialNote: string;
 	dimension: number;
 	numberOfBeds: number;
-	offeredAmenities: string[];
+	offeredAmenities: Amenity[];
 	isFeatured: boolean;
 };

@@ -6,9 +6,6 @@ const { data, error, status } = await useFetch<any>('http://localhost:8080/rooms
 	headers: {
 		'Content-Type': 'application/json',
 	},
-	getCachedData(key) {
-		return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-	},
 });
 
 if (status.value === 'success' && !error.value && data.value?.rooms) {

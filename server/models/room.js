@@ -21,7 +21,7 @@ const roomSchema = new Schema({
 	},
 	description: { type: String, required: [true, 'Description is required'] },
 	specialNote: { type: String },
-	offeredAmenities: { type: [String] },
+	offeredAmenities: { type: [{ id: String, name: String, icon: String }] },
 	isFeatured: { type: Boolean },
 });
 
