@@ -2,7 +2,9 @@
 <template>
 	<header class="bg-teal-600">
 		<div class="container mx-auto flex justify-between p-4">
-			<NuxtLink to="/" class="text-2xl text-white font-bold">Hotelzz</NuxtLink>
+			<NuxtLink to="/" class="text-2xl text-white font-bold"
+				>TotalBookings</NuxtLink
+			>
 			<ul class="flex gap-3 text-white font-bold">
 				<li>
 					<NuxtLink activeClass="underline" to="/">Home</NuxtLink>

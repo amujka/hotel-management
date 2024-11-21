@@ -40,15 +40,15 @@ defineProps<{
 				<h2 class="text-xl font-bold text-teal-600 lg:text-2xl">
 					Offered Amenities
 				</h2>
-				<div class="grid grid-cols-12 gap-4 mt-2">
+				<div class="grid grid-cols-12 gap-2 mt-2">
 					<p
 						v-for="amenitiy in room?.offeredAmenities"
 						:key="amenitiy.id"
-						class="flex gap-x-1 col-span-4 bg-teal-600 text-white p-1 lg:col-span-3 capitalize"
+						class="flex gap-x-1 col-span-6 text-teal-600 p-1 lg:col-span-3 capitalize border border-teal-600 rounded-lg"
 					>
 						<Icon
 							:name="`material-symbols-light:${amenitiy.icon}`"
-							style="color: white"
+							style="color: teal"
 							size="24px"
 						/>
 						{{ amenitiy.name }}
